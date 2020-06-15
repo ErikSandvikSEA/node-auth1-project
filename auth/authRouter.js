@@ -2,7 +2,6 @@ const bc = require('bcryptjs')
 const router = require('express').Router()
 
 const Users = require('../users/usersModel')
-const { json } = require('express')
 const { requiredProperty } = require('./requiredProperty')
 
 //REGISTRATION
@@ -79,7 +78,29 @@ router.post(
                          error: err
                     })
                })
-     })
+})
+
+//LOGOUT
+router.get('/logout', (req, res) => {
+     if(req.session) {
+          req.session.destroy(error => {
+               if(error){
+                    res.status(500).json({
+                         message: 'Error occurred while logging out',
+                         error: error
+                    })
+               } else {
+                    res.status(204).json({
+                         message: 'Successfully Logged Out'
+                    }).end()
+               }
+          })
+     } else {
+          res.status(204).json({
+               message: 'Successfully Logged Out'
+          }).end()
+     }
+})
 
 module.exports = router
 

@@ -19,4 +19,21 @@ router.get('/', (req, res) => {
           })
 })
 
+router.get('/:id', (req, res) => {
+     const userId = req.params.id
+     Users.findById(userId)
+          .then(user => {
+               res.status(200).json({
+                    userDetails: user
+               })
+          })
+          .catch(err => {
+               res.send(err)
+               res.status(500).json({
+                    message: 'Error occurred while fetching',
+                    error: err
+               })
+          })
+})
+
 module.exports = router

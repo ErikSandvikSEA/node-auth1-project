@@ -12,9 +12,9 @@ function find() {
           .select(
                "id", 
                "username",
-               'password', 
+              //  'password', 
                'jobTitle_name',
-               'jobTitle_id'
+              //  'jobTitle_id'
           )
           .orderBy("id");
    }
@@ -34,6 +34,15 @@ function find() {
    }
    
    function findById(id) {
-     return db("users").where({ id }).first();
+     return db("users")
+     .select(
+        "id", 
+        "username",
+       'password', 
+        'jobTitle_name',
+       'jobTitle_id'
+      )
+      .where({ id })
+      .first();
    }
    
