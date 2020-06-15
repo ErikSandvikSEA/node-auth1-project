@@ -6,6 +6,7 @@ const KnexSessionStore = require('connect-session-knex')(session)
 
 //routers
 const usersRouter = require('../users/usersRouter')
+const authRouter = require('../auth/authRouter')
 
 //middleware
 const requiresAuth = require('../auth/requiresAuth.js')
@@ -40,9 +41,13 @@ server.use(session(sessionConfig))
 
 server.use(
      '/api/users', 
-     // requiresAuth, 
+     requiresAuth, 
      usersRouter
-     )
+)
+server.use(
+     '/api/auth',
+     authRouter
+)
 
 server.get('/', (req, res) => {
      res.status(200).json({
