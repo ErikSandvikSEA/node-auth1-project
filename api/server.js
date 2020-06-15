@@ -4,6 +4,13 @@ const cors = require('cors')
 const session = require('express-session') //install this library
 const KnexSessionStore = require('connect-session-knex')(session)
 
+//routers
+const usersRouter = require('../users/usersRouter')
+
+//middleware
+const requiresAuth = require('../auth/requiresAuth.js')
+
+const dbConnection = require('../database/connection')
 
 const server = express()
 
@@ -18,8 +25,24 @@ const sessionConfig = {
      resave: false,
      saveUninitialized: true, //GDPR compliance
      store: new KnexSessionStore({
+          knex: dbConnection,
+          tablename: 'sessions',
+          sidfieldname: 'sid',
+          createtable: true,
+          clearInterval: 6000, //delete expired sessions - in milliseconds
      })
 }
+
+server.use(helmet())
+server.use(express.json())
+server.use(cors())
+server.use(session(sessionConfig))
+
+server.use(
+     '/api/users', 
+     // requiresAuth, 
+     usersRouter
+     )
 
 server.get('/', (req, res) => {
      res.status(200).json({
