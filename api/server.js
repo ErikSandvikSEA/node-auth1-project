@@ -41,7 +41,7 @@ server.use(session(sessionConfig))
 
 server.use(
      '/api/users', 
-     requiresAuth, 
+     // requiresAuth, 
      usersRouter
 )
 server.use(
